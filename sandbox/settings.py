@@ -9,6 +9,7 @@ TEMPLATE_DEBUG = DEBUG
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 MANAGERS = ADMINS
 
@@ -166,6 +167,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
+    'django.contrib.flatpages',
     # External apps
     'django_extensions',
     'debug_toolbar',
@@ -175,6 +177,14 @@ INSTALLED_APPS = [
 ]
 from oscar import get_core_apps
 INSTALLED_APPS += get_core_apps()
+
+AUTHENTICATION_BACKENDS = (
+    'oscar.apps.customer.auth_backends.Emailbackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGIN_REDIRECT_URL = '/accounts/'
+APPEND_SLASH = True
 
 DEBUG_TOOLBAR_CONFIG = {
     'INTERCEPT_REDIRECTS': False
@@ -190,3 +200,10 @@ HAYSTACK_CONNECTIONS = {
         'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
     },
 }
+
+OSCAR_SHOP_TAGLINE = 'Avalara sandbox'
+
+try:
+    from integration import *
+except ImportError:
+    pass

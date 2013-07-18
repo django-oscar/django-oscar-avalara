@@ -13,7 +13,8 @@ setup(name='django-oscar-avalara',
       license='BSD',
       packages=find_packages(exclude=['sandbox*', 'tests*']),
       include_package_data=True,
-      install_requires=['django-oscar>=0.5'],
+      install_requires=['django-oscar>=0.5.3'],
+      dependency_links=['http://github.com/tangentlabs/django-oscar/tarball/master#egg=django-oscar-0.5.3'],
       # See http://pypi.python.org/pypi?%3Aaction=list_classifiers
       classifiers=[
           'Development Status :: 4 - Beta',
