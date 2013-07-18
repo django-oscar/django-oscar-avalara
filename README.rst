@@ -1,11 +1,15 @@
-===================================
+====================================
 Avalara integration for django-oscar
-===================================
+====================================
 
 This package provides integration between Avalara_ and Oscar_.
 
 .. _Avalara: http://avalara.com
 .. _Oscar: http://oscarcommerce.com
+
+Useful documentation:
+
+* `Avalara docs <http://developer.avalara.com/api-docs/>`_
 
 Contributing
 ============
