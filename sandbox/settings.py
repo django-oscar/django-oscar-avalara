@@ -176,7 +176,9 @@ INSTALLED_APPS = [
     'south',
 ]
 from oscar import get_core_apps
-INSTALLED_APPS += get_core_apps()
+INSTALLED_APPS += get_core_apps(
+    ['apps.partner', 'apps.checkout']
+)
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.Emailbackend',
@@ -202,6 +204,7 @@ HAYSTACK_CONNECTIONS = {
 }
 
 OSCAR_SHOP_TAGLINE = 'Avalara'
+OSCAR_DEFAULT_CURRENCY = 'USD'
 
 try:
     from integration import *
