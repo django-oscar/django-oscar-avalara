@@ -171,7 +171,7 @@ INSTALLED_APPS = [
     # External apps
     'django_extensions',
     'debug_toolbar',
-    'oscar_avalara',
+    'avalara',
     'compressor',
     'south',
 ]
@@ -183,7 +183,7 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-LOGIN_REDIRECT_URL = '/accounts/'
+LOGIN_REDIRECT_URL = '/'
 APPEND_SLASH = True
 
 DEBUG_TOOLBAR_CONFIG = {
@@ -201,7 +201,7 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
-OSCAR_SHOP_TAGLINE = 'Avalara sandbox'
+OSCAR_SHOP_TAGLINE = 'Avalara'
 
 try:
     from integration import *

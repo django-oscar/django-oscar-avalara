@@ -11,6 +11,15 @@ Useful documentation:
 
 * `Avalara docs <http://developer.avalara.com/api-docs/>`_
 
+Usage
+=====
+
+Define the following settings:
+
+* ``AVALARA_ACCOUNT_NUMBER``: 
+* ``AVALARA_LICENSE_KEY``: 
+* ``AVALARA_COMPANY_CODE``: 
+
 Contributing
 ============
 

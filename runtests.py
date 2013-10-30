@@ -21,9 +21,9 @@ if not settings.configured:
         from integration import *
     except ImportError:
         extra_settings.update({
-            'AVALARY_ACCOUNT_NUMBER': '',
-            'AVALARY_LICENSE_KEY': '',
-            'AVALARY_COMPANY_CODE': '',
+            'AVALARA_ACCOUNT_NUMBER': '',
+            'AVALARA_LICENSE_KEY': '',
+            'AVALARA_COMPANY_CODE': '',
         })
     else:
         for key, value in locals().items():
@@ -52,7 +52,7 @@ if not settings.configured:
             'django.contrib.sites',
             'django.contrib.flatpages',
             'django.contrib.staticfiles',
-            'oscar_avalara',
+            'avalara',
             'compressor',
             'south',
         ] + get_core_apps(),
@@ -97,7 +97,7 @@ def run_tests(*test_args):
     # Run tests
     test_runner = NoseTestSuiteRunner(verbosity=1)
 
-    c = coverage(source=['oscar_avalara'], omit=['*migrations*', '*tests*'])
+    c = coverage(source=['avalara'], omit=['*migrations*', '*tests*'])
     c.start()
     num_failures = test_runner.run_tests(test_args)
     c.stop()
