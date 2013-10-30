@@ -6,9 +6,9 @@ from django.utils import simplejson as json
 import purl
 import requests
 
-from . import models
+from . import models, exceptions
 
-__all__ = ['AvalaraError', 'get_tax', 'post_tax']
+__all__ = ['get_tax', 'post_tax']
 
 logger = logging.getLogger('avalara')
 
@@ -17,10 +17,6 @@ URL_TEMPLATES = {
     'get_tax': purl.Template('{/version}/tax{/location}/get{?saleamount}'),
     'post_tax': purl.Template('{/version}/tax/get'),
 }
-
-
-class AvalaraError(Exception):
-    pass
 
 
 def fetch(method, url_template, url_params=None, payload=None):
@@ -51,23 +47,24 @@ def fetch(method, url_template, url_params=None, payload=None):
     logger.info("%s request to %s got %s response", method, url,
                 response.status_code)
 
-    # Handle errors
-    if response.status_code != 200:
-        logger.error("Error response: %s", response.content)
-        raise AvalaraError("%s response received" % response.status_code)
-
-    data = response.json()
-
-    if data['ResultCode'] != 'Success':
-        raise AvalaraError("Response was unsuccessful")
-
     # Save audit model
+    data = response.json()
     logger.debug("Received response: %s", pprint.pformat(data))
     models.Request.objects.create(
         account_number=settings.AVALARA_ACCOUNT_NUMBER,
         method=method, url=url,
         request=payload_json or '',
         response=response.content)
+
+    # Handle errors
+    if data['ResultCode'] == 'Error':
+        summary = data['Messages'][0]['Summary']
+        details = data['Messages'][0]['Details']
+        logger.error("Error response: %s, %s", summary, details)
+        raise exceptions.InvalidAddress(summary)
+
+    if data['ResultCode'] != 'Success':
+        raise exceptions.AvalaraError("Response was unsuccessful")
 
     return data
 

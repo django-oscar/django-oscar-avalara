@@ -7,13 +7,38 @@ from decimal import Decimal as D
 import zlib
 
 from django.core.cache import cache
+from django.core import exceptions
 from django.conf import settings
+from oscar.core.loading import get_class
 
 from . import gateway
 
-__all__ = ['apply_taxes', 'submit', 'fetch_tax_info']
+OrderTotalCalculator = get_class(
+    'checkout.calculators', 'OrderTotalCalculator')
+
+__all__ = ['apply_taxes_to_submission', 'apply_taxes', 'submit', 'fetch_tax_info']
 
 logger = logging.getLogger('avalara')
+
+
+def apply_taxes_to_submission(submission):
+    """
+    Apply taxes to a submission dict.
+
+    This is designed to work seamlessly with the PaymentDetailsView of Oscar's
+    checkout.
+    """
+    if submission['basket'].is_tax_known:
+        return
+    apply_taxes(
+        submission['user'],
+        submission['basket'],
+        submission['shipping_address'],
+        submission['shipping_method'])
+
+    # Update order total
+    submission['order_total'] = OrderTotalCalculator().calculate(
+        submission['basket'], submission['shipping_method'])
 
 
 def apply_taxes(user, basket, shipping_address, shipping_method):
@@ -125,6 +150,12 @@ def _build_payload(doc_type, doc_code, user, lines, shipping_address,
 
         # Ensure origin address in in Addresses collection
         partner_address = record.partner.primary_address
+        if not partner_address:
+            raise exceptions.ImproperlyConfigured((
+                "You need to create a primary address for partner %s "
+                "in order for Avalara to be able to calculate taxes") %
+                record.partner)
+
         partner_address_code = partner_address.generate_hash()
         if partner_address_code not in partner_address_codes:
             payload['Addresses'].append({
