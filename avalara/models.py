@@ -19,6 +19,28 @@ class Request(models.Model):
     class Meta:
         ordering = ('-date_created',)
 
+    @property
+    def doc_code(self):
+        data = json.loads(self.request)
+        return data['DocCode']
+
+    @property
+    def doc_type(self):
+        data = json.loads(self.request)
+        return data['DocType']
+
+    @property
+    def result_code(self):
+        data = json.loads(self.response)
+        return data['ResultCode']
+
+    @property
+    def error_message(self):
+        data = json.loads(self.response)
+        if 'Messages' in data:
+            return data['Messages'][0]['Summary']
+        return ''
+
     def request_html(self):
         data = json.loads(self.request)
         return '<br/><pre>%s</pre>' % pprint.pformat(data)

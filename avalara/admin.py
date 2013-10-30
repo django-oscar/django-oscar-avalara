@@ -4,7 +4,7 @@ from avalara import models
 
 
 class RequestAdmin(admin.ModelAdmin):
-    list_display = ('account_number', 'method', 'url', 'date_created')
+    list_display = ('doc_code', 'doc_type', 'result_code', 'error_message', 'date_created')
     readonly_fields = (
         'account_number',
         'method',
