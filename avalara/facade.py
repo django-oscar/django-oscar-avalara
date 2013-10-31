@@ -175,7 +175,7 @@ def _build_payload(doc_type, doc_code, user, lines, shipping_address,
             'DestinationCode': address_code,
             'OriginCode': partner_address_code,
             'ItemCode': record.partner_sku,
-            'Description': product.description[:255],
+            'Description': product.description[:255] if product.description else '',
             'Qty': line.quantity,
             'Amount': str(line.line_price_excl_tax),
         }

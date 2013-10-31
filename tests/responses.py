@@ -11,7 +11,7 @@ SUCCESS = {
     "TotalTaxCalculated": "1.67",
     "TaxLines": [
         {
-            "LineNo": "3",
+            "LineNo": "1",
             "TaxCode": "P0000000",
             "Taxability": "true",
             "BoundaryLevel": "Zip5",
