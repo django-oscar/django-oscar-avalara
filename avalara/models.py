@@ -17,6 +17,10 @@ class Request(models.Model):
 
     date_created = models.DateTimeField(auto_now_add=True)
 
+    def __unicode__(self):
+        return u'%s request, result: %s' % (
+            self.doc_type, self.result_code)
+
     class Meta:
         ordering = ('-date_created',)
 
