@@ -1,6 +1,7 @@
+from decimal import Decimal as D
+
 from django.test import TestCase
 import mock
-from decimal import Decimal as D
 
 from avalara import get_tax, models
 
