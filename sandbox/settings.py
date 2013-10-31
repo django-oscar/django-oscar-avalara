@@ -186,7 +186,9 @@ INSTALLED_APPS = [
 ]
 from oscar import get_core_apps
 INSTALLED_APPS += get_core_apps(
-    ['apps.partner', 'apps.checkout']
+    ['apps.partner',
+     'apps.shipping',
+     'apps.checkout']
 )
 
 AUTHENTICATION_BACKENDS = (
