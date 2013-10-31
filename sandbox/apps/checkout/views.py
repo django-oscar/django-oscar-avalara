@@ -28,6 +28,11 @@ class PaymentDetailsView(views.PaymentDetailsView):
 
         return submission
 
+    def get_context_data(self, **kwargs):
+        ctx = super(PaymentDetailsView, self).get_context_data(**kwargs)
+        ctx['show_tax_separately'] = True
+        return ctx
+
     def handle_successful_order(self, order):
         # Override the handle_successful_order method so we can submit the
         # order to Avalara for tax reporting
