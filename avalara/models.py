@@ -1,4 +1,5 @@
 import pprint
+from decimal import Decimal as D
 
 from django.db import models
 from django.utils import simplejson as json
@@ -40,6 +41,19 @@ class Request(models.Model):
         if 'Messages' in data:
             return data['Messages'][0]['Summary']
         return ''
+
+    @property
+    def total_taxable(self):
+        data = json.loads(self.response)
+        if 'TotalTaxable' in data:
+            return D(data['TotalTaxable'])
+
+    @property
+    def total_tax(self):
+        data = json.loads(self.response)
+        if 'TotalTax' in data:
+            return D(data['TotalTax'])
+
 
     def request_html(self):
         data = json.loads(self.request)
