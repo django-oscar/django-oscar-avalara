@@ -50,3 +50,12 @@ class PaymentDetailsView(views.PaymentDetailsView):
                          order.number, exc_info=True)
 
         return response
+
+
+class ThankYouView(views.ThankYouView):
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ThankYouView, self).get_context_data(**kwargs)
+        ctx['show_tax_separately'] = True
+        return ctx
+
