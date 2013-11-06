@@ -47,15 +47,22 @@ def apply_taxes(user, basket, shipping_address, shipping_method):
     """
     data = fetch_tax_info(user, basket, shipping_address, shipping_method)
 
-    # Build hash table of line_id => tax and apply to basket lines
+    # Build hash table of line_id => tax
     line_taxes = {}
     for tax_line in data['TaxLines']:
         line_taxes[tax_line['LineNo']] = D(tax_line['Tax'])
 
-    # Apply these tax values to the basket and shipping
-    # method.
+    # Apply these tax values to the basket and shipping method.
     for line in basket.all_lines():
-        line.stockinfo.price.tax = line_taxes[str(line.id)]
+        # Avalara gives us the tax for the whole line, but we want it at
+        # a unit level so we divide by the quantity.  This can lead to the unit
+        # tax having more than 2 decimal places.  This isn't a problem
+        # (AFAICT): we don't truncate at this stage but assign the correct
+        # decimal as the tax so that the total line tax is correct.  Rounding
+        # will occur when unit_tax_incl_tax is calculated for the Order.Line
+        # model but that isn't a problem.
+        unit_tax = line_taxes[str(line.id)] / line.quantity
+        line.stockinfo.price.tax = unit_tax
     shipping_method.tax = line_taxes['SHIPPING']
 
 
@@ -177,7 +184,7 @@ def _build_payload(doc_type, doc_code, user, lines, shipping_address,
             'ItemCode': record.partner_sku,
             'Description': product.description[:255] if product.description else '',
             'Qty': line.quantity,
-            'Amount': str(line.line_price_excl_tax),
+            'Amount': str(line.line_price_excl_tax_incl_discounts),
         }
         payload['Lines'].append(line)
 
