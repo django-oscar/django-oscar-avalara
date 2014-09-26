@@ -3,7 +3,7 @@ Avalara integration for django-oscar
 ====================================
 
 This package provides integration between Avalara_ and Oscar_.  Avalara is a
-service that provides accurate sales tax calculations.
+service that provides accurate sales tax calculations in the US.
 
 .. _Avalara: http://avalara.com
 .. _Oscar: http://oscarcommerce.com
@@ -15,7 +15,11 @@ Useful documentation:
 Installation
 ============
 
-Install from Github::
+Install from PyPI::
+
+    $ pip install django-oscar-avalara
+
+or Github::
 
     $ pip install git+https://github.com/tangentlabs/django-oscar-avalara.git
 
@@ -27,9 +31,9 @@ Specify the following settings:
 * ``AVALARA_LICENSE_KEY`` 
 * ``AVALARA_COMPANY_CODE`` 
 
-You should have been provided with these details when you signed with Avalara.
+You should have been provided with these details when you signed up with Avalara.
 
-When not in production, also set ``AVALARA_TEST_MODE = True`` to make requests
+When not in production, set ``AVALARA_TEST_MODE = True`` to make requests
 to the Avalara development server.
 
 This package uses a named logger ``'avalara'`` so it is normally useful to
