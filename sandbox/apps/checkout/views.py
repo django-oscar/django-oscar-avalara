@@ -58,4 +58,3 @@ class ThankYouView(views.ThankYouView):
         ctx = super(ThankYouView, self).get_context_data(**kwargs)
         ctx['show_tax_separately'] = True
         return ctx
-
