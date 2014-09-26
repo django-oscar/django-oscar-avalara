@@ -12,6 +12,11 @@ Useful documentation:
 
 * `Avalara docs <http://developer.avalara.com/api-docs/>`_
 
+Status:
+
+.. image:: https://secure.travis-ci.org/tangentlabs/django-oscar-avalara.png?branch=master
+    :target: http://travis-ci.org/#!/tangentlabs/django-oscar-avalara
+
 Installation
 ============
 
