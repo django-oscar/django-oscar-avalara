@@ -1,4 +1,4 @@
-from django.contrib.localflavor.us import forms as us_forms
+from localflavor.us import forms as us_forms
 from oscar.apps.checkout import forms
 
 
