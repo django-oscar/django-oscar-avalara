@@ -51,7 +51,9 @@ To integrate Avalara into checkout, you need to override two methods from the
 checkout view class ``PaymentDetailsView``.
 
 First override ``build_submission`` to apply taxes to the basket and shipping
-method::
+method:
+
+.. code:: python
 
     from oscar.apps.checkout import views
     from django.contrib import messages
@@ -85,7 +87,9 @@ We also watch out for ``InvalidAddress`` exceptions which will be raised if
 Avalara is unable to find a tax jurisdiction for the passed shipping address.
 
 Finally, override ``handle_successful_order`` to submit the placed order to
-Avalara::
+Avalara:
+
+.. code:: python
 
     from oscar.apps.checkout import views
     from django.contrib import messages
