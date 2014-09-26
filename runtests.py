@@ -77,6 +77,7 @@ if not settings.configured:
         ROOT_URLCONF='tests.urls',
         COMPRESS_ENABLED=False,
         STATIC_URL='/',
+        STATIC_ROOT='.',
         NOSE_ARGS=['-s', '--with-specplugin'],
         **extra_settings
     )

@@ -54,6 +54,11 @@ def apply_taxes(user, basket, shipping_address, shipping_method):
 
     # Apply these tax values to the basket and shipping method.
     for line in basket.all_lines():
+        line_id = str(line.id)
+        if line_id not in line_taxes:
+            raise RuntimeError("Unable to determine taxes on basket #%s" %
+                               basket.id)
+
         # Avalara gives us the tax for the whole line, but we want it at
         # a unit level so we divide by the quantity.  This can lead to the unit
         # tax having more than 2 decimal places.  This isn't a problem
@@ -62,7 +67,7 @@ def apply_taxes(user, basket, shipping_address, shipping_method):
         # will occur when unit_tax_incl_tax is calculated for the Order.Line
         # model but that isn't a problem.
         unit_tax = line_taxes[str(line.id)] / line.quantity
-        line.stockinfo.price.tax = unit_tax
+        line.purchase_info.price.tax = unit_tax
     shipping_method.tax = line_taxes['SHIPPING']
 
 

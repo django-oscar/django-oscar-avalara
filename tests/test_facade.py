@@ -22,7 +22,8 @@ def build_submission():
     partner = basket.lines.all()[0].stockrecord.partner
     G(partner_models.PartnerAddress, partner=partner)
 
-    shipping_address = G(models.ShippingAddress)
+    shipping_address = G(models.ShippingAddress,
+                         phone_number='')
     shipping_method = methods.FixedPrice(D('0.99'))
     shipping_method.set_basket(basket)
 
