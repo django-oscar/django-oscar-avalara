@@ -222,6 +222,6 @@ def _build_cache_key(payload):
         parts.append(str(address['AddressCode']))
 
     for line in payload['Lines']:
-        parts.extend([line['Amount'], line['ItemCode'], str(line['Qty'])])
+        parts.extend([line['Amount'], line['ItemCode'], str(line['Qty']), str(line['LineNo'])])
 
     return "avalara-%s" % zlib.crc32("-".join(parts))
