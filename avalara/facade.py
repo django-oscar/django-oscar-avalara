@@ -34,18 +34,19 @@ def apply_taxes_to_submission(submission):
         submission['user'],
         submission['basket'],
         submission['shipping_address'],
-        submission['shipping_method'])
+        submission['shipping_method'],
+        submission['shipping_charge'])
 
     # Update order total
     submission['order_total'] = OrderTotalCalculator().calculate(
-        submission['basket'], submission['shipping_method'])
+        submission['basket'], submission['shipping_charge'])
 
 
-def apply_taxes(user, basket, shipping_address, shipping_method):
+def apply_taxes(user, basket, shipping_address, shipping_method, shipping_charge):
     """
-    Apply taxes to the basket and shipping method
+    Apply taxes to the basket and shipping charge
     """
-    data = fetch_tax_info(user, basket, shipping_address, shipping_method)
+    data = fetch_tax_info(user, basket, shipping_address, shipping_method, shipping_charge)
 
     # Build hash table of line_id => tax
     line_taxes = {}
@@ -68,7 +69,7 @@ def apply_taxes(user, basket, shipping_address, shipping_method):
         # model but that isn't a problem.
         unit_tax = line_taxes[str(line.id)] / line.quantity
         line.purchase_info.price.tax = unit_tax
-    shipping_method.tax = line_taxes['SHIPPING']
+    shipping_charge.tax = line_taxes['SHIPPING']
 
 
 def submit(order):
@@ -82,7 +83,7 @@ def submit(order):
         order.lines.all(),
         order.shipping_address,
         order.shipping_method,
-        order.shipping_excl_tax,
+        order.shipping_charge,
         commit=True)
     gateway.post_tax(payload)
 
@@ -99,17 +100,17 @@ def fetch_tax_info_for_order(order):
         order.user, order.lines.all(),
         order.shipping_address,
         order.shipping_method,
-        order.shipping_excl_tax,
+        order.shipping_charge,
         commit=False)
     gateway.post_tax(payload)
 
 
-def fetch_tax_info(user, basket, shipping_address, shipping_method):
+def fetch_tax_info(user, basket, shipping_address, shipping_method, shipping_charge):
     # Look for a cache hit first
     payload = _build_payload(
         'SalesOrder', 'basket-%d' % basket.id,
         user, basket.all_lines(), shipping_address,
-        unicode(shipping_method.name), shipping_method.charge_excl_tax,
+        unicode(shipping_method.name), shipping_charge.excl_tax,
         commit=False)
     key = _build_cache_key(payload)
     data = cache.get(key)

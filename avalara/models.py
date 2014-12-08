@@ -2,7 +2,7 @@ import pprint
 from decimal import Decimal as D
 
 from django.db import models
-from django.utils import simplejson as json
+import json
 
 
 class Request(models.Model):

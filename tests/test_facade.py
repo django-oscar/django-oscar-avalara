@@ -25,16 +25,17 @@ def build_submission():
     shipping_address = G(models.ShippingAddress,
                          phone_number='')
     shipping_method = methods.FixedPrice(D('0.99'))
-    shipping_method.set_basket(basket)
+    shipping_charge = shipping_method.calculate(basket)
 
     calculator = calculators.OrderTotalCalculator()
-    total = calculator.calculate(basket, shipping_method)
+    total = calculator.calculate(basket, shipping_charge)
 
     return {
         'user': None,
         'basket': basket,
         'shipping_address': shipping_address,
         'shipping_method': shipping_method,
+        'shipping_charge': shipping_charge,
         'order_total': total,
         'order_kwargs': {},
         'payment_kwargs': {}}
@@ -45,7 +46,7 @@ class TestApplyTaxesToSubmission(TestCase):
     def test_sets_taxes_on_basket_and_shipping_method(self):
         submission = build_submission()
         self.assertFalse(submission['basket'].is_tax_known)
-        self.assertFalse(submission['shipping_method'].is_tax_known)
+        self.assertFalse(submission['shipping_charge'].is_tax_known)
 
         with mock.patch('requests.request') as mocked_request:
             mocked_response = mock.Mock()
@@ -57,4 +58,4 @@ class TestApplyTaxesToSubmission(TestCase):
             avalara.apply_taxes_to_submission(submission)
 
         self.assertTrue(submission['basket'].is_tax_known)
-        self.assertTrue(submission['shipping_method'].is_tax_known)
+        self.assertTrue(submission['shipping_charge'].is_tax_known)

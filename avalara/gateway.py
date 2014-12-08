@@ -2,7 +2,7 @@ import logging
 import pprint
 
 from django.conf import settings
-from django.utils import simplejson as json
+import json
 import purl
 import requests
 
