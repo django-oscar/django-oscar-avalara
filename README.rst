@@ -148,6 +148,11 @@ Note that you will need to have test credentials for Avalara in a private
 Changelog
 =========
 
+0.2
+---
+
+Support Oscar 1.0 and solve a cache key issue.
+
 0.1.1
 -----
 

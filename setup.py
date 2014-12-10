@@ -3,10 +3,10 @@
 from setuptools import setup, find_packages
 
 setup(name='django-oscar-avalara',
-      version='0.1.1',
-      url='https://github.com/tangentlabs/django-oscar-avalara',
-      author="Tangent Labs (part of Tangent Snowball)",
-      author_email="oscar@tangentlabs.co.uk",
+      version='0.2',
+      url='https://github.com/django-oscar/django-oscar-avalara',
+      author="David Winterbottom",
+      author_email="david.winterbottom@gmail.com",
       description="Avalara integration for django-oscar",
       long_description=open('README.rst').read(),
       keywords="Taxes, Avalara",
