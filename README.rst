@@ -144,3 +144,17 @@ and browse it after::
 
 Note that you will need to have test credentials for Avalara in a private
 ``integration.py`` module.
+
+Changelog
+=========
+
+0.1.1
+-----
+
+Patch release to limit support to ``django-oscar>=0.6,<1.0``.
+
+0.1
+---
+
+Initial version - supports ``django-oscar>=0.6``.
+
