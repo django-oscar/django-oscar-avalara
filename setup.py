@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name='django-oscar-avalara',
-      version='0.1',
+      version='0.1.1',
       url='https://github.com/tangentlabs/django-oscar-avalara',
       author="Tangent Labs (part of Tangent Snowball)",
       author_email="oscar@tangentlabs.co.uk",
