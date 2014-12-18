@@ -59,3 +59,18 @@ class TestApplyTaxesToSubmission(TestCase):
 
         self.assertTrue(submission['basket'].is_tax_known)
         self.assertTrue(submission['shipping_charge'].is_tax_known)
+
+
+class TestSubmitOrder(TestCase):
+
+    def test_build_payload(self):
+        shipping_address = G(models.ShippingAddress,
+                             phone_number='')
+        order = factories.create_order(shipping_address=shipping_address)
+        # Ensure partner has an address
+        partner = order.lines.all()[0].stockrecord.partner
+        G(partner_models.PartnerAddress, partner=partner)
+
+        with mock.patch('avalara.gateway.post_tax') as mocked_post_tax:
+            avalara.submit(order)
+            self.assertTrue(mocked_post_tax.called)
