@@ -148,6 +148,11 @@ Note that you will need to have test credentials for Avalara in a private
 Changelog
 =========
 
+0.2.1
+-----
+
+Fix a few issues with submitting orders.
+
 0.2
 ---
 
