@@ -9,12 +9,13 @@ import zlib
 from django.core.cache import cache
 from django.core import exceptions
 from django.conf import settings
-from oscar.core.loading import get_class
+from oscar.core.loading import get_class, get_model
 
 from . import gateway
 
 OrderTotalCalculator = get_class(
     'checkout.calculators', 'OrderTotalCalculator')
+OrderLine = get_model('order', 'Line')
 
 __all__ = ['apply_taxes_to_submission', 'apply_taxes', 'submit', 'fetch_tax_info']
 
@@ -82,8 +83,8 @@ def submit(order):
         order.user,
         order.lines.all(),
         order.shipping_address,
-        order.shipping_method,
-        order.shipping_charge,
+        unicode(order.shipping_method),
+        order.shipping_excl_tax,
         commit=True)
     gateway.post_tax(payload)
 
@@ -183,16 +184,20 @@ def _build_payload(doc_type, doc_code, user, lines, shipping_address,
             partner_address_codes.append(partner_address_code)
 
         # Ensure the origin address is in the Addresses collection
-        line = {
+        line_payload = {
             'LineNo': line.id,
             'DestinationCode': address_code,
             'OriginCode': partner_address_code,
             'ItemCode': record.partner_sku,
             'Description': product.description[:255] if product.description else '',
             'Qty': line.quantity,
-            'Amount': str(line.line_price_excl_tax_incl_discounts),
         }
-        payload['Lines'].append(line)
+        if isinstance(line, OrderLine):
+            line_payload['Amount'] = str(line.line_price_excl_tax)
+        else:
+            line_payload['Amount'] = str(line.line_price_excl_tax_incl_discounts)
+
+        payload['Lines'].append(line_payload)
 
     # Shipping (treated as another line).  We assume origin address is the
     # first partner address
