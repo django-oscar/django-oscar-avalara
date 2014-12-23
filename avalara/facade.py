@@ -192,6 +192,8 @@ def _build_payload(doc_type, doc_code, user, lines, shipping_address,
             'Description': product.description[:255] if product.description else '',
             'Qty': line.quantity,
         }
+        # We distinguish between order and basket lines (which have slightly
+        # different APIs).
         if isinstance(line, OrderLine):
             line_payload['Amount'] = str(line.line_price_excl_tax)
         else:
