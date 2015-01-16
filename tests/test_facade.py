@@ -74,3 +74,34 @@ class TestSubmitOrder(TestCase):
         with mock.patch('avalara.gateway.post_tax') as mocked_post_tax:
             avalara.submit(order)
             self.assertTrue(mocked_post_tax.called)
+
+    def test_build_payload_with_partial_lines(self):
+        shipping_address = G(models.ShippingAddress,
+                             phone_number='')
+        basket = factories.create_basket(empty=True)
+        product = factories.create_product()
+        factories.create_stockrecord(
+            product, num_in_stock=10, price_excl_tax=D('10.00'))
+        basket.add_product(product, quantity=2)
+        # add a second line
+        product = factories.create_product()
+        factories.create_stockrecord(
+            product, num_in_stock=10, price_excl_tax=D('5.00'))
+        basket.add_product(product, quantity=3)
+
+        order = factories.create_order(basket=basket,
+                                       shipping_address=shipping_address)
+        # Ensure partner has an address
+        partner = order.lines.all()[0].stockrecord.partner
+        G(partner_models.PartnerAddress, partner=partner)
+
+        with mock.patch('avalara.gateway.post_tax') as mocked_post_tax:
+            avalara.submit(order, order.lines.all(), [2, 1])
+            self.assertTrue(mocked_post_tax.called)
+            payload = mocked_post_tax.call_args[0][0]
+            # 2 product lines, and 1 for shipping
+            self.assertEqual(len(payload['Lines']), 3)
+            self.assertEqual(payload['Lines'][0]['Qty'], 2)
+            self.assertEqual(payload['Lines'][0]['Amount'], '20')
+            self.assertEqual(payload['Lines'][1]['Qty'], 1)
+            self.assertEqual(payload['Lines'][1]['Amount'], '5')
