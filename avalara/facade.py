@@ -15,7 +15,6 @@ from . import gateway
 
 OrderTotalCalculator = get_class(
     'checkout.calculators', 'OrderTotalCalculator')
-OrderLine = get_model('order', 'Line')
 
 __all__ = ['apply_taxes_to_submission', 'apply_taxes', 'submit', 'fetch_tax_info']
 
@@ -126,6 +125,7 @@ def fetch_tax_info(user, basket, shipping_address, shipping_method, shipping_cha
 
 def _build_payload(doc_type, doc_code, user, lines, shipping_address,
                    shipping_method, shipping_charge, commit):
+    OrderLine = get_model('order', 'Line')
     payload = {}
 
     # Use a single company code for now
