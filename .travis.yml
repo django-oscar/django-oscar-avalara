@@ -1,9 +1,23 @@
 language: python
+dist: xenial
+
 python:
-  - 2.7
+  - "3.6"
+
+matrix:
+  fast_finish: true
+  include:
+    - env: TOXENV=django111-oscar16
+    - env: TOXENV=django20-oscar16
+    - env: TOXENV=django21-oscar16
+
+before_install:
+  - export DJANGO_SETTINGS_MODULE=test.settings
+
 install:
-  - make install
+  - pip install -e .
+  - pip install -r requirements.txt
+
+
 script:
-  - coverage run ./runtests.py
-after_success:
-  - coveralls
+  - tox
