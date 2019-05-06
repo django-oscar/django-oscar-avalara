@@ -9,7 +9,7 @@ from oscar.apps.checkout import calculators
 from django_dynamic_fixture import G
 import mock
 
-import avalara
+from avalara import facade
 from . import responses
 
 
@@ -55,7 +55,7 @@ class TestApplyTaxesToSubmission(TestCase):
                 return_value=responses.SUCCESS)
             mocked_request.return_value = mocked_response
 
-            avalara.apply_taxes_to_submission(submission)
+            facade.apply_taxes_to_submission(submission)
 
         self.assertTrue(submission['basket'].is_tax_known)
         self.assertTrue(submission['shipping_charge'].is_tax_known)
@@ -72,5 +72,5 @@ class TestSubmitOrder(TestCase):
         G(partner_models.PartnerAddress, partner=partner)
 
         with mock.patch('avalara.gateway.post_tax') as mocked_post_tax:
-            avalara.submit(order)
+            facade.submit(order)
             self.assertTrue(mocked_post_tax.called)
