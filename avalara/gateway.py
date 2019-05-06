@@ -6,7 +6,7 @@ import json
 import purl
 import requests
 
-from . import models, exceptions
+from . import exceptions
 
 __all__ = ['get_tax', 'post_tax']
 
@@ -23,6 +23,7 @@ def fetch(method, url_template, url_params=None, payload=None):
     """
     Make a HTTP round-trip to Avalara
     """
+    from .models import Request
     # Build URL
     if url_params is None:
         url_params = {}
@@ -50,7 +51,7 @@ def fetch(method, url_template, url_params=None, payload=None):
     # Save audit model
     data = response.json()
     logger.debug("Received response: %s", pprint.pformat(data))
-    models.Request.objects.create(
+    Request.objects.create(
         account_number=settings.AVALARA_ACCOUNT_NUMBER,
         method=method, url=url,
         request=payload_json or '',
