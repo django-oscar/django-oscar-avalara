@@ -3,7 +3,8 @@ from decimal import Decimal as D
 from django.test import TestCase
 import mock
 
-from avalara import get_tax, models
+from avalara import models
+from avalara.gateway import get_tax
 
 RESPONSES = {
     'success': {
