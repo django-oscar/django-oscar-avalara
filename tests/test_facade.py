@@ -51,8 +51,8 @@ class TestApplyTaxesToSubmission(TestCase):
         with mock.patch('requests.request') as mocked_request:
             mocked_response = mock.Mock()
             mocked_response.status_code = 200
-            mocked_response.json = mock.Mock(
-                return_value=responses.SUCCESS)
+            mocked_response.json = mock.Mock(return_value=responses.SUCCESS)
+            mocked_response.content = responses.SUCCESS
             mocked_request.return_value = mocked_response
 
             facade.apply_taxes_to_submission(submission)

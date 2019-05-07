@@ -1,6 +1,5 @@
 from django.test import TestCase
 import mock
-from decimal import Decimal as D
 
 from avalara import exceptions, gateway, models
 from . import responses
@@ -13,6 +12,7 @@ def post_tax(response, payload=None, status_code=200):
         mocked_response = mock.Mock()
         mocked_response.status_code = status_code
         mocked_response.json = mock.Mock(return_value=response)
+        mocked_response.content = response
         mocked_request.return_value = mocked_response
         return gateway.post_tax(payload)
 

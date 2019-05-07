@@ -33,6 +33,7 @@ class TestGetTaxSuccessResponse(TestCase):
             response = mock.Mock()
             response.status_code = 200
             response.json = mock.Mock(return_value=RESPONSES['success'])
+            response.content = RESPONSES['success']
             mocked_request.return_value = response
             self.data = get_tax(('47.627935', '-122.51702'), D('19.99'))
 
