@@ -83,7 +83,7 @@ def submit(order):
         order.user,
         order.lines.all(),
         order.shipping_address,
-        unicode(order.shipping_method),
+        str(order.shipping_method),
         order.shipping_excl_tax,
         commit=True)
     gateway.post_tax(payload)
@@ -111,7 +111,7 @@ def fetch_tax_info(user, basket, shipping_address, shipping_method, shipping_cha
     payload = _build_payload(
         'SalesOrder', 'basket-%d' % basket.id,
         user, basket.all_lines(), shipping_address,
-        unicode(shipping_method.name), shipping_charge.excl_tax,
+        str(shipping_method.name), shipping_charge.excl_tax,
         commit=False)
     key = _build_cache_key(payload)
     data = cache.get(key)
@@ -231,4 +231,4 @@ def _build_cache_key(payload):
     for line in payload['Lines']:
         parts.extend([line['Amount'], line['ItemCode'], str(line['Qty']), str(line['LineNo'])])
 
-    return "avalara-%s" % zlib.crc32("-".join(parts))
+    return "avalara-%s" % zlib.crc32("-".join(parts).encode('utf8'))
