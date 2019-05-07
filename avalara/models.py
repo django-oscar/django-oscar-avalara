@@ -17,8 +17,8 @@ class Request(models.Model):
 
     date_created = models.DateTimeField(auto_now_add=True)
 
-    def __unicode__(self):
-        return u'%s request, result: %s' % (
+    def __str__(self):
+        return '%s request, result: %s' % (
             self.doc_type, self.result_code)
 
     class Meta:
@@ -57,7 +57,6 @@ class Request(models.Model):
         data = json.loads(self.response)
         if 'TotalTax' in data:
             return D(data['TotalTax'])
-
 
     def request_html(self):
         data = json.loads(self.request)
