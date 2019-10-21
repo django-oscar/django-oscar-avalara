@@ -1,5 +1,5 @@
 # Developing
-Werkzeug==0.15.2
+Werkzeug==0.15.3
 django-debug-toolbar==1.11
 django-extensions==2.1.6
 
