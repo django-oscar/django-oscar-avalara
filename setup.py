@@ -14,7 +14,7 @@ setup(name='django-oscar-avalara',
       packages=find_packages(exclude=['sandbox*', 'tests*']),
       include_package_data=True,
       install_requires=[
-          'django-oscar>=1.6',
+          'django-oscar>=1.6,<2',
           'requests',
           'purl>=0.8',
       ],
