@@ -12,7 +12,7 @@ spec==1.4.1
 coverage==4.5.3
 django-dynamic-fixture==2.0.0
 freezegun==0.3.11
-Babel==2.6.0
+Babel==2.9.1
 django-localflavor==2.1
 
 
